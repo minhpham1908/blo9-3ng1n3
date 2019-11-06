@@ -3,13 +3,8 @@
 
 <div class="container content">
     <div class="posts">
-        <%- include("partials/post-item", {info: {postTitle: "Bài viết số 1", postDate: "06 Feb 2019", postLink:"/post"}}) %>
-        <%- include("partials/post-item", {info: {postTitle: "Hướng dẫn hoàn thành challenges trong league 3.8", postDate: "06 Feb 2019", postLink:"/post"}}) %>
-        <%- include("partials/post-item", {info: {postTitle: "1 tap như Hoàng Xuân Vinh?", postDate: "06 Feb 2019", postLink:"/post"}}) %>
-        <%- include("partials/post-item", {info: {postTitle: "Hoang xuan vinh", postDate: "06 Feb 2019", postLink:"/post"}}) %>
-
         <%posts.forEach(post => {%>
-        <%- include("partials/post-item", {info: {postTitle: post.title, postDate: post.date, postLink:"/post"}}) %>
+        <%- include("partials/post-item", {info: {postTitle: post.title, postDate: post.dateCreated, postLink:"/post/"+ post.path, summary: post.summary}}) %>
         <%});%>
 
     </div>

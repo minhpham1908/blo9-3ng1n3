@@ -16,30 +16,30 @@ var info = {
     database: "blogdb"
 }
 
-// var connection = mysql.createConnection(info)
-// connection.connect((error) => {
-//     if (error) throw error;
-//     console.log("connected");
-// });
-var dataaa = ""
-fs.readFile(__dirname + "/posts/test.md", "utf-8", (error, data) => {
-    if (error) throw error
-    dataaa = data.toString()
-    console.log(dataaa)
-})
+var connection = mysql.createConnection(info)
+connection.connect((error) => {
+    if (error) throw error;
+    console.log("connected");
+});
+
+
+// fs.readFile(__dirname + "/posts/test.md", "utf-8", (error, data) => {
+//     if (error) throw error
+//     dataaa = data.toString()
+//     // console.log(dataaa)
+// })
 marked.setOptions({
     renderer: new marked.Renderer()
 })
 
-
-
 app.get("/", function (req, res) {
     var posts;
-    var postsQuery = "select title, date from post, postactiondate where post.postId = postactiondate.postId"
+    var postsQuery = "select * from post"
     connection.query(postsQuery, (err, results) => {
         if (err) throw err;
         var string = JSON.stringify(results);
         posts = JSON.parse(string);
+        // console.log(posts)
         res.render("home", { posts: posts })
     })
 
@@ -47,10 +47,32 @@ app.get("/", function (req, res) {
 })
 
 app.get("/post", (req, res) => {
-    res.render("post-page")
+    res.redirect("/")
 })
 
+app.get("/post/:postLink", (req, res) => {
+    console.log(req.params)
+    var link = req.params.postLink;
+    //tìm file theo link trong thư mục ./posts/
+    // chuyển markdown sang html
+    //chèn vào trang post
+    postInfo = {
+        title: "hello1",
+        date: "06 Feb 2012",
+        content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Officiis similique voluptatibus ab cumque, voluptatem enim commodi architecto maxime ipsa odit error ea esse libero eos rerum? Reprehenderit, consectetur! Perferendis praesentium nam blanditiis sint voluptates ullam quos ex a illo tenetur.",
+    }
+    fs.readFile(__dirname + "/posts/" + link + ".md", "utf-8", (error, data) => {
+        if (error) throw error
+        data = data.toString()
+        // console.log(dataaa)
+        data = marked(data, (err, result) => {
+            if (err) throw err
+            postInfo.content = result;
+            res.render("post-page", { postInfo: postInfo })
+        })
+    })
 
+})
 
 
 
