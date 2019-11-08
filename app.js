@@ -10,7 +10,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 var info = {
-    host: "localhost",
+    host: "14.248.16.234",
     user: "root",
     password: "minh1998",
     database: "blogdb"
@@ -46,6 +46,8 @@ app.get("/", function (req, res) {
 
 })
 
+
+
 app.get("/post", (req, res) => {
     res.redirect("/")
 })
@@ -53,24 +55,37 @@ app.get("/post", (req, res) => {
 app.get("/post/:postLink", (req, res) => {
     console.log(req.params)
     var link = req.params.postLink;
-    //tìm file theo link trong thư mục ./posts/
-    // chuyển markdown sang html
-    //chèn vào trang post
+    var path = __dirname + "/posts/" + link + ".md"
+    //info lấy từ file md hoặc mysql
+    //Trong project 1 thì sẽ trích file từ mysql
     postInfo = {
         title: "hello1",
         date: "06 Feb 2012",
         content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Officiis similique voluptatibus ab cumque, voluptatem enim commodi architecto maxime ipsa odit error ea esse libero eos rerum? Reprehenderit, consectetur! Perferendis praesentium nam blanditiis sint voluptates ullam quos ex a illo tenetur.",
     }
-    fs.readFile(__dirname + "/posts/" + link + ".md", "utf-8", (error, data) => {
-        if (error) throw error
-        data = data.toString()
-        // console.log(dataaa)
-        data = marked(data, (err, result) => {
-            if (err) throw err
-            postInfo.content = result;
-            res.render("post-page", { postInfo: postInfo })
-        })
+    fs.open(path, 'r', err => {
+        if (err) {
+            console.log(err)
+            res.render("404")
+        } else {
+            fs.readFile(path, "utf-8", (error, data) => {
+                if (error) throw error
+                data = data.toString()
+                // console.log(dataaa)
+                data = marked(data, (err, result) => {
+                    if (err) throw err
+                    postInfo.content = result;
+                    res.render("post-page", { postInfo: postInfo })
+                })
+            })
+        }
+
     })
+    //tìm file theo link trong thư mục ./posts/
+    // chuyển markdown sang html
+    //chèn vào trang post
+
+
 
 })
 
