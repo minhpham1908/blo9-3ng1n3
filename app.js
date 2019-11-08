@@ -46,23 +46,37 @@ app.get("/", function (req, res) {
 
 })
 
+app.get("/about", (req, res) => {
+    res.render("404")
+})
+
 
 
 app.get("/post", (req, res) => {
     res.redirect("/")
 })
 
-app.get("/post/:postLink", (req, res) => {
+app.get("/post/:postLink", async (req, res) => {
     console.log(req.params)
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
     //info lấy từ file md hoặc mysql
     //Trong project 1 thì sẽ trích file từ mysql
+    var sqlquery = `select * from Post, posttag where post.postId = posttag.postId and post.path = '${link}'`
+    console.log(sqlquery)
+
     postInfo = {
         title: "hello1",
         date: "06 Feb 2012",
         content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Officiis similique voluptatibus ab cumque, voluptatem enim commodi architecto maxime ipsa odit error ea esse libero eos rerum? Reprehenderit, consectetur! Perferendis praesentium nam blanditiis sint voluptates ullam quos ex a illo tenetur.",
     }
+
+    connection.query(sqlquery, await( (err, results) => {
+        if (err) throw err;
+        var string = JSON.stringify(results);
+        postInfo = JSON.parse(string)[0];
+        console.log(postInfo)
+    }))
     fs.open(path, 'r', err => {
         if (err) {
             console.log(err)
@@ -99,10 +113,9 @@ app.listen(3000, "localhost", function () {
     console.log("Listening on port 3000");
 })
 
-
 // connection.end(function(err) {
-//   if (err) {
-//     return console.log('error:' + err.message);
-//   }
-//   console.log('Close the database connection.');
-// });
+//     if (err) {
+//       return console.log('error:' + err.message);
+//     }
+//     console.log('Close the database connection.');
+//   });
