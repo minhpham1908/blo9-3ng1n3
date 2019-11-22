@@ -10,7 +10,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 var info = {
-    host: "14.248.16.234",
+    host: "localhost",
     user: "root",
     password: "minh1998",
     database: "blogdb"
@@ -106,8 +106,7 @@ app.get("/post/:postLink", async (req, res) => {
 
 
 app.get("*", function (req, res) {
-    var message = "Sorry, page not found... What are you doing with your life?";
-    res.send(message)
+    app.render("404")
 })
 app.listen(3000, "localhost", function () {
     console.log("Listening on port 3000");
