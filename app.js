@@ -4,10 +4,13 @@ var app = express();
 var bodyParser = require("body-parser")
 var mysql = require("mysql")
 var marked = require("marked")
+var favicon = require('serve-favicon')
+var path = require("path")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+app.use(favicon(path.join(__dirname,"public","favicon","favicon.ico")))
 
 var info = {
     host: "localhost",
@@ -47,7 +50,7 @@ app.get("/", function (req, res) {
 })
 
 app.get("/about", (req, res) => {
-    res.render("404")
+    res.render("notfound")
 })
 
 
@@ -80,7 +83,7 @@ app.get("/post/:postLink", async (req, res) => {
     fs.open(path, 'r', err => {
         if (err) {
             console.log(err)
-            res.render("404")
+            res.render("notfound")
         } else {
             fs.readFile(path, "utf-8", (error, data) => {
                 if (error) throw error
@@ -106,8 +109,9 @@ app.get("/post/:postLink", async (req, res) => {
 
 
 app.get("*", function (req, res) {
-    app.render("404")
+    res.render("notfound")
 })
+
 app.listen(3000, "localhost", function () {
     console.log("Listening on port 3000");
 })
