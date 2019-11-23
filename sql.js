@@ -1,7 +1,7 @@
 const sql = require("mysql")
 var moment = require("moment")
 var info = {
-    host: "14.248.16.234",
+    host: "localhost",
     user: "root",
     password: "minh1998",
     database: "blogdb"
@@ -24,7 +24,7 @@ con.connect((error) => {
 
 
 
-    //create a new tag
+    
 
     // update post information
     // update tag
@@ -100,6 +100,8 @@ con.connect((error) => {
 
     }
 
+
+
     const addTag = (postId, tags) => {
         tags.forEach(tag => {
             var sqlQuery = `INSERT INTO posttag (tagId, postId) VALUES ('${tag}', '${postId}')`
@@ -110,10 +112,24 @@ con.connect((error) => {
         });
     }
 
+    //create a new tag
+    const createNewTag = (tag) =>{
+        var sqlQuery = `INSERT INTO tag (tag) VALUES ('${tag}')`
+        con.query(sqlQuery, (err, results)=>{
+            if (err) throw err;
+        })
+    }
+
     var postInfo1 = [1, "Test 1", 'test', , "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, numquam."]
     var postInfo2 = [2, "Test 2", 'test2', , "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, numquam."]
+    var postInfo3 = [3, "Tổng quan phân tích chương trình dịch", 'tong-quan-phan-tich-chuong-trinh-dich', , "Lorem sum ipsum dolor sit, amet consectetur adipisicing elit. Est, numquam."]
     // createNewPost(postInfo1)
     // createNewPost(postInfo2)
+    // createNewPost(postInfo3)
+
+    createNewTag("complier")
+    createNewTag("template")
+    addTag(3,[7,8])
 
 
 

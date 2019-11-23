@@ -1,7 +1,11 @@
-<% include partials/header %>
-<% include partials/sidebar %>
+<% include partials/post-header %>
+<% include partials/post-sidebar %>
 <div class="container content">
+    <!-- Post content -->
     <%- include("partials/post", {post: postInfo}) %>
 </div>
+<!-- scripts -->
+<!-- toc generator -->
+<script src="/js/toc.js"></script>
 <% include partials/footer %>
-<!-- post : {title: "hello", date: "06 Feb 2019", content :"Hello"} -->
+<!-- End of file -->

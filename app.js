@@ -31,9 +31,21 @@ connection.connect((error) => {
 //     dataaa = data.toString()
 //     // console.log(dataaa)
 // })
+
+//setup marked
+var renderer = new marked.Renderer()
+
+//overriding
+renderer.link = (href) => {
+    var id = href.substring(1)
+    return `<a href="${href}" id="${id}"></a>`
+}
 marked.setOptions({
-    renderer: new marked.Renderer()
+    renderer: renderer,
+    headerIds: false
 })
+
+
 
 app.get("/", function (req, res) {
     var posts;
