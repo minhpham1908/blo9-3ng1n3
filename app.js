@@ -6,6 +6,7 @@ var mysql = require("mysql")
 var marked = require("marked")
 var favicon = require('serve-favicon')
 var path = require("path")
+var getdate = require("./getdatemodule")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -36,6 +37,7 @@ connection.connect((error) => {
 var renderer = new marked.Renderer()
 
 //overriding
+
 renderer.link = (href) => {
     var id = href.substring(1)
     return `<a href="${href}" id="${id}"></a>`
@@ -54,6 +56,9 @@ app.get("/", function (req, res) {
         if (err) throw err;
         var string = JSON.stringify(results);
         posts = JSON.parse(string);
+        posts.forEach(post => {
+            post.dateCreated = getdate(posts.dateCreated)
+        });
         // console.log(posts)
         res.render("home", { posts: posts })
     })
@@ -71,27 +76,35 @@ app.get("/post", (req, res) => {
     res.redirect("/")
 })
 
-app.get("/post/:postLink", async (req, res) => {
-    console.log(req.params)
+app.get("/post/:postLink", (req, res) => {
+    console.log("PARAM:",req.params)
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
+    
+    var postInfo = {
+        postId: 3,
+        title: "hello1",
+        path: 'tong-quan-phan-tich-chuong-trinh-dich',
+        dateCreated: "06 Feb 2012",
+        summary: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Officiis similique voluptatibus ab cumque, voluptatem enim commodi architecto maxime ipsa odit error ea esse libero eos rerum? Reprehenderit, consectetur! Perferendis praesentium nam blanditiis sint voluptates ullam quos ex a illo tenetur.",
+        tags: []
+    }
     //info lấy từ file md hoặc mysql
     //Trong project 1 thì sẽ trích file từ mysql
-    var sqlquery = `select * from Post, posttag where post.postId = posttag.postId and post.path = '${link}'`
-    console.log(sqlquery)
-
-    postInfo = {
-        title: "hello1",
-        date: "06 Feb 2012",
-        content: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.Officiis similique voluptatibus ab cumque, voluptatem enim commodi architecto maxime ipsa odit error ea esse libero eos rerum? Reprehenderit, consectetur! Perferendis praesentium nam blanditiis sint voluptates ullam quos ex a illo tenetur.",
-    }
-
-    connection.query(sqlquery, await( (err, results) => {
+    var getpostInfoQuery = `select * from Post where post.path = '${link}'`
+    connection.query(getpostInfoQuery, ((err, results) => {
         if (err) throw err;
         var string = JSON.stringify(results);
         postInfo = JSON.parse(string)[0];
+        postInfo.dateCreated = getdate(postInfo.dateCreated,"DD MMM YYYY")
         console.log(postInfo)
     }))
+    // var getpostTagsQuery = `select * from posttag where postid = '${postInfo.postId}'`
+    // var x = connection.query(getpostTagsQuery,((err, results) => {
+    //     if (err) throw err;
+    //     console.log(results)
+    // }))
+    // console.log("x:",x.results)
     fs.open(path, 'r', err => {
         if (err) {
             console.log(err)
@@ -134,3 +147,7 @@ app.listen(3000, "localhost", function () {
 //     }
 //     console.log('Close the database connection.');
 //   });
+
+function getPost(link) {
+    
+}
