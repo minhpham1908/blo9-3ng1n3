@@ -51,7 +51,6 @@ con.connect((error) => {
 
     var getPosts = (option) => {
         if (option === "all") {
-
             var sqlQuerry = "select * from Post, posttag where post.postId = posttag.postId"
             con.query(sqlQuerry, (err, results) => {
                 console.log("Post: ");
@@ -127,16 +126,16 @@ con.connect((error) => {
     // createNewPost(postInfo2)
     // createNewPost(postInfo3)
 
-    createNewTag("complier")
-    createNewTag("template")
-    addTag(3,[7,8])
+    // createNewTag("complier")
+    // createNewTag("template")
+    // addTag(3,[7,8])
 
 
 
     get("tag")
     get("posttag")
     getPosts("all")
-    var tags = [6];
+    // var tags = [6];
 
     // addTag(1, tags)
     // addTag(2, tags)
@@ -148,3 +147,4 @@ con.connect((error) => {
         console.log('Close the database connection.');
     })
 })
+

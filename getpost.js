@@ -78,9 +78,7 @@ async function getPost(link) {
 
 }
 
-
-
-module.exports.getPost = getPost;
+module.exports = getPost;
 
 
 
