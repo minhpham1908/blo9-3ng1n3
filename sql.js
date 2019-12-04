@@ -24,7 +24,7 @@ con.connect((error) => {
 
 
 
-    
+
 
     // update post information
     // update tag
@@ -112,9 +112,9 @@ con.connect((error) => {
     }
 
     //create a new tag
-    const createNewTag = (tag) =>{
+    const createNewTag = (tag) => {
         var sqlQuery = `INSERT INTO tag (tag) VALUES ('${tag}')`
-        con.query(sqlQuery, (err, results)=>{
+        con.query(sqlQuery, (err, results) => {
             if (err) throw err;
         })
     }
@@ -148,3 +148,8 @@ con.connect((error) => {
     })
 })
 
+function connect() {
+    return new Promise(function (resolve, reject) {
+        resolve("Connected")
+    })
+}

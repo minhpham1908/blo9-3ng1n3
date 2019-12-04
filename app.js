@@ -102,7 +102,11 @@ app.get("/post/:postLink", (req, res) => {
     })
 })
 
-
+app.get("/tags/:tag", function(req,res) {
+    console.log("Param:", req.params)
+    var tag = req.params.tag;
+    res.render("tags", {tag: tag});
+})
 
 app.get("*", function (req, res) {
     res.render("notfound")
@@ -118,7 +122,3 @@ app.listen(3000, "localhost", function () {
 //     }
 //     console.log('Close the database connection.');
 //   });
-
-function getPost(link) {
-
-}

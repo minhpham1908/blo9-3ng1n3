@@ -10,6 +10,9 @@
 <!-- Tags -->
 <div class="tags">
     Tag: 
+    <% post.tags.forEach(tag => { %>
+    <a class="tag" href="/tags/<%=tag%>.html"><%= tag%></a>
+    <%});%>
 </div>
 <!-- Related Post -->
 <div class="related"></div>
