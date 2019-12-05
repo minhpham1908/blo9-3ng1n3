@@ -236,3 +236,8 @@ function getPostsByTag(tagId) {
 }
 
 
+function connect() {
+    return new Promise(function (resolve, reject) {
+        resolve("Connected")
+    })
+}
