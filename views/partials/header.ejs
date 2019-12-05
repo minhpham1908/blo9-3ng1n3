@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="/css/poole.css">
     <link rel="stylesheet" href="/css/syntax.css">
     <link rel="stylesheet" href="/css/hyde.css">
+    <link rel="stylesheet" href="/css/app.css">
+
     <style>
         .post-title {
             font-size: 2rem;
             font-weight: bold;
         }
     </style>
+    <% if(typeof css !== 'undefined') { %>
+        <% console.log(css) %>
+        <link rel="stylesheet" href="/css/ulgrid.css">
+        <% }%>
     <title>Minh blog</title>
 </head>
 

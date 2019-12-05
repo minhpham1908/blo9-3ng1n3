@@ -21,12 +21,12 @@ var info = {
     database: "blogdb"
 }
 
-var connection = mysql.createConnection(info)
-connection.connect((error) => {
-    if (error) throw error;
-    console.log("connected");
+// var connection = mysql.createConnection(info)
+// connection.connect((error) => {
+//     if (error) throw error;
+//     console.log("connected");
 
-});
+// });
 
 
 // fs.readFile(__dirname + "/posts/test.md", "utf-8", (error, data) => {
@@ -102,10 +102,16 @@ app.get("/post/:postLink", (req, res) => {
     })
 })
 
-app.get("/tags/:tag", function(req,res) {
+app.get("/tags/", function(req,res) {
+    
+    res.render("notfound")
+})
+
+app.get("/tags/:tag", async function(req,res) {
     console.log("Param:", req.params)
     var tag = req.params.tag;
-    res.render("tags", {tag: tag});
+    var allTags = await getAllTags();
+    res.render("tags", {tag: tag, tags: allTags});
 })
 
 app.get("*", function (req, res) {

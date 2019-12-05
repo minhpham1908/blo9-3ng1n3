@@ -1,11 +1,25 @@
-<% include partials/header %>
+<%- include("partials/header", {css: "ulgrid"}) %>
 <% include partials/sidebar %>
 
 <div class="container content">
+    <h2>Posts with tag <span class="tags"><span class="tag"><%=tag%></span></span></h2>
+    <ul class="post-list">
+        <li>Post title</li>
+        <% posts.foreach( post=> { %>
+            <li><a href="/ <%=post.path%>"><%=post.title%></a></li>
+        <%})%>
     
+    </ul>
     <h2>Tags</h2>
-    <ul>
-        
+    <ul class="tags">
+        <% tags.foreach( tag => {%>
+            <li class="tag"> <%=tag.tag%> (<span class="nop"><=%nop%></span>)</li>
+        <% }) %>
+
+        <li class="tag">Linh tinh (<span class="nop">2</span>)</li>
+        <li class="tag">Linh tinh (<span class="nop">2</span>)</li>
+        <li class="tag">Linh tinh (<span class="nop">2</span>)</li>
+        <li class="tag">Linh tinh (<span class="nop">2</span>)</li>
     </ul>
 </div>
 <% include partials/footer %>
