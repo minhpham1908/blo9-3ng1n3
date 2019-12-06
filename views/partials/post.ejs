@@ -5,11 +5,13 @@
     <h1 class="post-title"><%= post.title %></h1>
     <span class="post-date"><%= post.dateCreated %></span>
     <!--Content-->
-    <%- post.content %>
+    <div class="post-content">
+        <%- post.content %>
+    </div>
 </article>
 <!-- Tags -->
 <div class="tags">
-    Tag: 
+    Tag:
     <% post.tags.forEach(tag => { %>
     <a class="tag" href="/tags/<%=tag%>"><%= tag%></a>
     <%});%>

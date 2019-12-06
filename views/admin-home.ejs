@@ -1,0 +1,14 @@
+<%- include("partials/header", {webTitle: "post"}) %>
+
+<div class="container content">
+        <div class="posts">
+            <%posts.forEach(post => {%>
+            <%- include("partials/post-item", {info: {postTitle: post.title, postDate: post.dateCreated, postLink:"/post/"+ post.path, summary: post.summary}}) %>
+            <%});%>
+        </div>
+        <div class="pagination">
+            <span class="pagination-item newer">Newer</span>
+            <span class="pagination-item older">Older</span>
+        </div>
+    </div>
+<% include partials/footer %>

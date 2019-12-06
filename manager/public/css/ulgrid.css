@@ -1,0 +1,12 @@
+.tags .tag {
+    display: inline-block;
+    list-style-type: none;
+}
+
+li {
+    list-style-type: none;
+}
+a {
+    text-decoration: underline #202020;
+    color: #202020;
+}
