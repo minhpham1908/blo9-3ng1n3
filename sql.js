@@ -1,36 +1,38 @@
 const mysql = require("mysql")
-var getdate = require("./getdatemodule")
+var convertDate = require("./getdatemodule")
+var moment = require("moment")
 var info = {
     host: "localhost",
     user: "root",
     password: "minh1998",
     database: "blogdb"
 }
-var connection = mysql.createConnection(info)
-
+var con = mysql.createConnection(info)
 //create a post
 //create a new reocord in PostTag Table by postId
 //luu bai viet duoi dang markdown
 
 
 function connect2db() {
-    return new Promise((resolve, reject) => {
-        con.connect((error) => {
-            if (error) reject(error)
-            resolve("Connected!")
-        })
-    })
+    // return new Promise((resolve, reject) => {
+    //     con.connect((error) => {
+    //         if (error) reject(error)
+    //         resolve("Connected!")
+    //     })
+    // })
+    con.connect()
+    console.log("Connected!")
 }
 
 function getPosts() {
-    var sqlQuery = "sselect * from post"
+    var sqlQuery = "select * from post"
     return new Promise(function (resolve, reject) {
         con.query(sqlQuery, function (err, results, fields) {
             if (err) reject(err)
-            var string = JSON.stringify(results);
-            var posts = JSON.parse(string);
+            var results = JSON.stringify(results);
+            var posts = JSON.parse(results);
             posts.forEach(post => {
-                post.dateCreated = getdate(posts.dateCreated)
+                post.dateCreated = convertDate(post.dateCreated, "DD MMM YYYY")
             });
             resolve(posts)
         })
@@ -40,11 +42,11 @@ function getPosts() {
 function getPostInfo(link) {
     return new Promise(function (resolve, reject) {
         var getpostInfoQuery = `select * from Post where post.path = '${link}'`;
-        connection.query(getpostInfoQuery, function (err, results, fields) {
+        con.query(getpostInfoQuery, function (err, results, fields) {
             if (err) reject(err);
             var string = JSON.stringify(results);
             postInfo = JSON.parse(string)[0];
-            postInfo.dateCreated = getdate(postInfo.dateCreated, "DD MMM YYYY")
+            postInfo.dateCreated = convertDate(postInfo.dateCreated, "DD MMM YYYY")
             resolve(postInfo)
         })
     })
@@ -53,7 +55,7 @@ function getPostInfo(link) {
 function getPostTagInfo(postId) {
     return new Promise(function (resolve, reject) {
         var getpostTagsQuery = `select * from posttag, tag where posttag.postid = '${postId}' and posttag.tagid = tag.tagid`
-        connection.query(getpostTagsQuery, ((err, results, field) => {
+        con.query(getpostTagsQuery, ((err, results, field) => {
             if (err) reject(err);
             var tags = []
             var results = JSON.stringify(results);
@@ -71,36 +73,66 @@ async function getThePost(link) {
     try {
         var postInfo = await getPostInfo(link);
         postInfo = await getPostTagInfo(postInfo.postId)
-        return new Promise.resolve(postInfo)
+        return Promise.resolve(postInfo)
     } catch (error) {
-        return new Promise.reject(error)
+        return Promise.reject(postInfo)
     }
     //get post taginfo
 }
 
 function getAllTags() {
     var sqlQuery = "select * from Tag"
-    con.query(sqlQuery, function(err, results, fields){
-        if (err) reject(err)
-        results = JSON.stringify(results);
-        results = JSON.parse(results);
-        resolve(results)
-    })
-}
-
-function getPostsByTag(tagId) {
-    var sqlQuery = `select * from Tag, Posttag, Post where Tag.tagId = Postag.tagId and Posttag.postId = post.postId and Tag.tagId = "${tagId}"`
-    con.query(sqlQuery, function(err, results, fields){
-        if (err) reject(err)
-        results = JSON.stringify(results);
-        results = JSON.parse(results);
-        resolve(results)
-    })
-}
-
-
-function connect() {
     return new Promise(function (resolve, reject) {
-        resolve("Connected")
+        con.query(sqlQuery, function (err, results, fields) {
+            if (err) reject(err)
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            resolve(results)
+        })
     })
+}
+
+function getNumberofTag() {
+    var sqlQuery = "select tag.tagId, tag.tag, count(postId) as NumberOfPosts from tag, posttag where tag.tagId = posttag.tagId group by tag.tagId, tag.tag"
+    return new Promise(function (resolve, reject) {
+        con.query(sqlQuery, function (err, results, fields) {
+            if (err) reject(err)
+            tags =[]
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            results.forEach(result => {
+                tags.push(result)
+            })
+            resolve(tags)
+        })
+    })
+}
+
+function getPostsByTag(tag) {
+    var sqlQuery = `select * from tag, posttag, post where tag.tagId = posttag.tagId and posttag.postId = post.postId and tag.tag = '${tag}'`
+    return new Promise(function (resolve, reject) {
+        con.query(sqlQuery, function (err, results, fields) {
+            if (err) reject(err)
+            posts = []
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            results.forEach(result => {
+                posts.push(result)
+            })
+            resolve(posts)
+        })
+    })
+}
+function end() {
+    con.end()
+}
+
+module.exports = {
+    connect2db,
+    getPosts,
+    getThePost,
+    getAllTags,
+    getPostsByTag,
+    getNumberofTag,
+    end
 }

@@ -6,8 +6,7 @@ var mysql = require("mysql")
 var marked = require("marked")
 var favicon = require('serve-favicon')
 var path = require("path")
-var getdate = require("./getdatemodule")
-var getPost = require("./test")
+var sqlUtil = require("./sql")
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -15,25 +14,12 @@ app.set("view engine", "ejs");
 app.use(favicon(path.join(__dirname, "public", "favicon", "favicon.ico")))
 
 var info = {
-    host: "14.231.30.163",
+    host: "localhost",
     user: "root",
     password: "minh1998",
     database: "blogdb"
 }
 
-// var connection = mysql.createConnection(info)
-// connection.connect((error) => {
-//     if (error) throw error;
-//     console.log("connected");
-
-// });
-
-
-// fs.readFile(__dirname + "/posts/test.md", "utf-8", (error, data) => {
-//     if (error) throw error
-//     dataaa = data.toString()
-//     // console.log(dataaa)
-// })
 
 //setup marked
 var renderer = new marked.Renderer()
@@ -50,22 +36,11 @@ marked.setOptions({
 })
 
 
+sqlUtil.connect2db()
 
-app.get("/", function (req, res) {
-    var posts;
-    var postsQuery = "select * from post"
-    connection.query(postsQuery, (err, results) => {
-        if (err) throw err;
-        var string = JSON.stringify(results);
-        posts = JSON.parse(string);
-        posts.forEach(post => {
-            post.dateCreated = getdate(posts.dateCreated)
-        });
-        // console.log(posts)
-        res.render("home", { posts: posts })
-    })
-
-
+app.get("/", async function (req, res) {
+    var posts = await sqlUtil.getPosts();
+    res.render("home", { posts: posts })
 })
 
 app.get("/about", (req, res) => {
@@ -78,44 +53,37 @@ app.get("/post", (req, res) => {
     res.redirect("/")
 })
 
-app.get("/post/:postLink", (req, res) => {
+app.get("/post/:postLink", async (req, res) => {
     console.log("PARAM:", req.params)
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
-
-
-    getPost.getPost(link).then(postInfo => {
-        fs.open(path, 'r', err => {
-            if (err) {
-                console.log(err)
-                res.render("notfound")
-            } else {
-                var data = fs.readFileSync(path, "utf-8")
-                data = data.toString();
-                data = marked(data, (err, result) => {
-                    if (err) throw err
-                    postInfo.content = result;
-                    res.render("post-page", { postInfo: postInfo })
-                })
-            }
-        })
+    var postInfo = await sqlUtil.getThePost(link)
+    var data = fs.readFileSync(path, "utf-8")
+    data = data.toString();
+    data = marked(data, (err, result) => {
+        if (err) throw err
+        postInfo.content = result;
+        res.render("post-page", { postInfo: postInfo })
     })
 })
 
-app.get("/tags/", function(req,res) {
-    
+app.get("/tags/", function (req, res) {
     res.render("notfound")
 })
 
-app.get("/tags/:tag", async function(req,res) {
+app.get("/tags/:tag", async function (req, res) {
     console.log("Param:", req.params)
     var tag = req.params.tag;
-    var allTags = await getAllTags();
-    res.render("tags", {tag: tag, tags: allTags});
+    var posts = await sqlUtil.getPostsByTag(tag)
+    var tags = await sqlUtil.getNumberofTag()
+    console.log(tag)
+    console.log(posts)
+    console.log(tags)
+    res.render("tags", { tag: tag, posts: posts, tags: tags });
 })
 
 app.get("*", function (req, res) {
-    res.render("notfound")
+    res.redirect("/")
 })
 
 app.listen(3000, "localhost", function () {

@@ -3,22 +3,10 @@ var marked = require("marked")
 
 var mysql = require("mysql")
 var getdate = require("./getdatemodule")
-// const renderer = new marked.Renderer()
-// marked.setOptions({
-//     renderer : renderer
-// })
+var sqlUtil = require("./sql")
 
-// fs.readFile(__dirname + "/posts/test.md", 'utf8', (error, data) => {
-//     if (error) throw error
-//     var lexedString = marked.lexer(data)
-
-//     var html = marked.parser(lexedString)
-//     fs.writeFile("test.html", html, 'utf8', (err)=> {
-//         if(err) throw err
-//     })
-// })
 var info = {
-    host: "14.231.30.163",
+    host: "localhost",
     user: "root",
     password: "minh1998",
     database: "blogdb",
@@ -33,55 +21,32 @@ var postInfo = {
     summary: "Chua co gi",
     tags: ["nothing"]
 }
-var connection = mysql.createConnection(info)
-function getPostInfo(link) {
-    return new Promise(function (resolve, reject) {
-        var getpostInfoQuery = `select * from Post where post.path = '${link}'`;
-        connection.query(getpostInfoQuery, function (err, results, fields) {
-            if (err) reject(err);
-            var string = JSON.stringify(results);
-            postInfo = JSON.parse(string)[0];
-            postInfo.dateCreated = getdate(postInfo.dateCreated, "DD MMM YYYY")
-            resolve(postInfo)
-        })
-    })
+
+sqlUtil.connect2db()
+async function he(tagId) {
+    // var tags = await sqlUtil.getAllTags()
+    var tags = await sqlUtil.getNumberofTag()
+    console.log("TAGS:", tags)
+    // console.log("POSTS:", posts)
+    // var numberofPost =posts.length
 }
+he()
+sqlUtil.end()
+// var data = fs.readFileSync(path, "utf-8")
 
-function getPostTagInfo(postId) {
-    return new Promise(function (resolve, reject) {
-        var getpostTagsQuery = `select * from posttag, tag where posttag.postid = '${postId}' and posttag.tagid = tag.tagid`
-        connection.query(getpostTagsQuery, ((err, results, field) => {
-            if (err) reject(err);
-            var tags = []
-            var results = JSON.stringify(results);
-            results = JSON.parse(results);
-            results.forEach(element => {
-                tags.push(element.tag)
-            });
-            postInfo.tags = tags
-            resolve(postInfo)
-        }))
-    })
-}
+// console.log(typeof data)
 
 
-async function getPost(link) {
-    try {
-        
-        var postinfo = await getPostInfo(link)
-        postinfo = await getPostTagInfo(postinfo.postId)
-        return postinfo
-    } catch (error) {
-        console.log('Error!', error);
-
-    }
-
-}
+// module.exports.getPost = getPost;
 
 
+<% posts.forEach( post => { %>
+    <li><a href="/ <%=post.path%>"><%=post.title%></a></li>
+<%})%>
 
-module.exports.getPost = getPost;
-
+<% tags.forEach( tag => {%>
+    <li class="tag"> <%=tag.tag%> (<span class="nop"><=%tag.NumberOfPosts%></span>)</li>
+<% }) %>
 
 
 
