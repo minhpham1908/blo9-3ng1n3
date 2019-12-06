@@ -8,10 +8,10 @@ app.use(express.static("public"));
 app.set("view engine", "ejs")
 
 app.get("/", function(req, res) {
-
+    
 })
 
-app.post("/login",function(req, res) {
+app.post("/",function(req, res) {
     var body = req.body
     console.log(body)
     res.send("ok")

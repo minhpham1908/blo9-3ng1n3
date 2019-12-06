@@ -25,7 +25,7 @@ var postInfo = {
 sqlUtil.connect2db()
 async function he(tagId) {
     // var tags = await sqlUtil.getAllTags()
-    var tags = await sqlUtil.getNumberofTag()
+    var tags = await sqlUtil.getPosts()
     console.log("TAGS:", tags)
     // console.log("POSTS:", posts)
     // var numberofPost =posts.length
@@ -40,13 +40,6 @@ sqlUtil.end()
 // module.exports.getPost = getPost;
 
 
-<% posts.forEach( post => { %>
-    <li><a href="/ <%=post.path%>"><%=post.title%></a></li>
-<%})%>
-
-<% tags.forEach( tag => {%>
-    <li class="tag"> <%=tag.tag%> (<span class="nop"><=%tag.NumberOfPosts%></span>)</li>
-<% }) %>
 
 
 

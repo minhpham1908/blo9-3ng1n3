@@ -2,9 +2,10 @@ const mysql = require("mysql")
 var convertDate = require("./getdatemodule")
 var moment = require("moment")
 var info = {
-    host: "localhost",
+    host: "128.199.239.13",
+    port: 3306,
     user: "root",
-    password: "minh1998",
+    password: "gn1C4IrvFiGesuwK",
     database: "blogdb"
 }
 var con = mysql.createConnection(info)
@@ -41,7 +42,7 @@ function getPosts() {
 
 function getPostInfo(link) {
     return new Promise(function (resolve, reject) {
-        var getpostInfoQuery = `select * from Post where post.path = '${link}'`;
+        var getpostInfoQuery = `select * from post where post.path = '${link}'`;
         con.query(getpostInfoQuery, function (err, results, fields) {
             if (err) reject(err);
             var string = JSON.stringify(results);
@@ -97,7 +98,7 @@ function getNumberofTag() {
     return new Promise(function (resolve, reject) {
         con.query(sqlQuery, function (err, results, fields) {
             if (err) reject(err)
-            tags =[]
+            tags = []
             results = JSON.stringify(results);
             results = JSON.parse(results);
             results.forEach(result => {
