@@ -1,6 +1,7 @@
-<%- include("partials/header", {webTitle: "post"}) %>
+<%- include("partials/admin-header", {webTitle: "post"}) %>
 
 <div class="container content">
+    <div><a href="/newpost">New Post</a></div>
         <div class="posts">
             <%posts.forEach(post => {%>
             <%- include("partials/post-item", {info: {postTitle: post.title, postDate: post.dateCreated, postLink:"/post/"+ post.path, summary: post.summary}}) %>

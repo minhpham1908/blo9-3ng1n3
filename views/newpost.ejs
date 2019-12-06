@@ -1,0 +1,16 @@
+<%- include("partials/admin-header", {webTitle: "New Post", editPost:true}) %>
+
+<div class="container content">
+    <div class="post">
+        <div class="post-title">
+            <div class="editable" contenteditable="true" aria-placeholder="Title..."></div>
+        </div>
+        <div class="post-content">
+            <div class="editable" contenteditable="true" placeholder="Tell your story...">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/editor.js"></script>
+<% include partials/footer %>

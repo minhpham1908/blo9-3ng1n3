@@ -1,16 +1,18 @@
-<%- include("partials/header", {webTitle: "post"}) %>
+<%- include("partials/admin-header", {webTitle: "post"}) %>
 
 <div class="container content">
-    <div class="post-title">
-        <div class="editable" contenteditable>
-            <h1>Hello</h1>
+    <article class="post">
+        <div class="post-title">
+            <div class="editable" contenteditable>
+                <h1><%=postInfo.title%></h1>
+            </div>
         </div>
-    </div>
-    <div class="post-content">
-        <div class="editable" contenteditable>
-            day la noi dung
+        <div class="post-content">
+            <div class="editable" contenteditable>
+                <%-postInfo.content%>
+            </div>
         </div>
-    </div>
+    </article>
 </div>
 <script src="/js/editor.js"></script>
 <% include partials/footer %>
