@@ -10,7 +10,7 @@ function getLink(header) {
 // function generateTOC() {
 //initialization level2, 3 ,4
 let l2 = 0, l3 = 0, l4 = 0;
-//query
+//query 
 let headings = document.querySelectorAll('h2, h3, h4, h5, h6');
 let tocContainer = document.querySelector(".toc-container");
 

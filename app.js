@@ -32,7 +32,7 @@ renderer.link = (href) => {
 }
 marked.setOptions({
     renderer: renderer,
-    headerIds: false
+    headerIds: true
 })
 
 

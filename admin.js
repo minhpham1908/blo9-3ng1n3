@@ -50,9 +50,10 @@ app.get("/post/:post", async function(req, res) {
     })
 })
 
-app.post("/",function(req, res) {
+app.post("/newpost", async function(req, res) {
     var body = req.body
-    console.log(body)
+    await postToMetadata();
+    await postToFileContent();
     res.send("ok")
 })
 
