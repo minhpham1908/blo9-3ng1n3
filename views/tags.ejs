@@ -12,7 +12,7 @@
     <h2>Tags</h2>
     <ul class="tags">
         <% tags.forEach( tag => {%>
-        <li class="tag"> <%=tag.tag%> (<span class="nop"><%= tag.NumberOfPosts %></span>)</li>
+        <li class="tag"><a href="/tags/<%=tag.tag%>"><%=tag.tag%> (<span class="nop"><%= tag.NumberOfPosts %></span>)</a></li>
         <% }) %>
     </ul>
 </div>
