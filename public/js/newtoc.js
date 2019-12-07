@@ -2,9 +2,13 @@
 // work for this structure: ## [](#phan-1-chuong-2) Phân tích cú pháp (Syntax Analysis)
 
 function getLink(header) {
-    header.firstElementChild.textContent = header.textContent;
-    header.firstElementChild.removeAttribute("id");
-    header.lastChild.remove()
+    // tao 1 anchor tag
+    let anchor = document.createElement("a")
+    anchor.href = "#" + header.id;
+    anchor.textContent = header.textContent;
+    header.textContent = ""
+    header.insertBefore(anchor, null)
+    header.removeAttribute("id");
     return header;
 }
 // function generateTOC() {
