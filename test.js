@@ -25,13 +25,15 @@ var postInfo = {
 sqlUtil.connect2db()
 async function he(tagId) {
     // var tags = await sqlUtil.getAllTags()
-    var tags = await sqlUtil.getPosts()
-    console.log("TAGS:", tags)
-    // console.log("POSTS:", posts)
+    // var result = await sqlUtil.createUser('113486703879106033181','Minh Pham')
+    // result = await sqlUtil.createUser('113486703879106033183','Minh Pham')
+    result = await sqlUtil.getUser("113486703879106033185")
+    console.log("POSTS:", result)
+    sqlUtil.end()
     // var numberofPost =posts.length
 }
 he()
-sqlUtil.end()
+
 // var data = fs.readFileSync(path, "utf-8")
 
 // console.log(typeof data)

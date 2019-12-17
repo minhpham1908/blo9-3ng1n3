@@ -124,6 +124,43 @@ function getPostsByTag(tag) {
         })
     })
 }
+
+function createUser(userId, username) {
+    var sqlQuery = `insert into User(idUser, username) value ('${userId}', '${username}')`
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, (err, results, fields) => {
+            if (err) reject(err)
+            resolve(`Them thanh cong nguoi dung ${username}`)
+        })
+    })
+}
+
+function findUserById(id) {
+    var sqlQuery = `select * from User where idUser = '${id}'`
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, (err, results, fields) => {
+            if (err) reject(err)
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            resolve(results.length)
+
+        })
+    })
+}
+
+function getUser(id) {
+    var sqlQuery = `select * from User where idUser = '${id}'`
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, (err, results, fields) => {
+            if (err) reject(err)
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            resolve(results)
+
+        })
+    })
+}
+
 function end() {
     con.end()
 }
@@ -135,5 +172,8 @@ module.exports = {
     getAllTags,
     getPostsByTag,
     getNumberofTag,
+    createUser,
+    findUserById,
+    getUser,
     end
 }

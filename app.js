@@ -7,11 +7,31 @@ var marked = require("marked")
 var favicon = require('serve-favicon')
 var path = require("path")
 var sqlUtil = require("./sql")
+var session = require('express-session');
+var cookieSession = require('cookie-session')
+var passport = require('passport')
+var indexRouter = require('./routes/index')
+var authRouter = require('./routes/auth')
+var passportSetup = require('./auth/google')
+var config = require('./auth/_config')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(favicon(path.join(__dirname, "public", "favicon", "favicon.ico")))
+// app.use(session({
+//     secret: 'secret cat',
+//     resave: true,
+//     saveUninitialized: true
+// }))
+
+app.use(cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [config.session.cookieKey]
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 var info = {
     host: "localhost",
@@ -36,12 +56,13 @@ marked.setOptions({
 })
 
 
+
 sqlUtil.connect2db()
 
-app.get("/", async function (req, res) {
-    var posts = await sqlUtil.getPosts();
-    res.render("home", { posts: posts })
-})
+
+
+app.use('/', indexRouter)
+app.use('/auth', authRouter)
 
 app.get("/about", (req, res) => {
     res.render("notfound")
@@ -86,8 +107,8 @@ app.get("*", function (req, res) {
     res.redirect("/")
 })
 
-app.listen(3000, "localhost", function () {
-    console.log("Listening on port 3000");
+app.listen(3200, "localhost", function () {
+    console.log("Listening on port 3200");
 })
 
 // connection.end(function(err) {

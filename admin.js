@@ -57,7 +57,7 @@ app.post("/newpost", async function(req, res) {
     res.send("ok")
 })
 
-app.listen(3200, (err)=>{
+app.listen(3201, (err)=>{
     if(err) throw err
-    console.log("listen on 3200")
+    console.log("listen on 3201")
 })
