@@ -3,10 +3,11 @@ var router = express.Router()
 var sqlUtil = require("../sql")
 
 
-router.get('/', async function (req, res,next) {
+router.get('/', async function (req, res, next) {
     var posts = await sqlUtil.getPosts();
-    console.log(req.user)
-    res.render("home", { posts: posts })
+    console.log(req.session)
+
+    res.render("home", { posts: posts, user: req.user })
 })
 
 

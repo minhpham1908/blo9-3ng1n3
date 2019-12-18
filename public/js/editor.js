@@ -1,9 +1,9 @@
 
 var simplemde = new SimpleMDE({
     autofocus: true,
-    
+
     element: document.getElementById("content"),
-    
+
     insertTexts: {
         horizontalRule: ["", "\n\n-----\n\n"],
         image: ["![](http://", ")"],
@@ -51,3 +51,11 @@ getContentBtn.addEventListener("click", getContent)
 function getContent() {
     content = simplemde.value()
 }
+
+const choices = new Choices(document.getElementById('tags-input'), {
+    delimiter: ',',
+    editItems: true,
+    maxItemCount: 5,
+    removeItemButton: true,
+});
+
