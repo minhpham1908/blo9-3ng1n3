@@ -18,20 +18,21 @@
 </div>
 <!-- Related Post -->
 <div class="related">
-    <p>Các bài viết liên quan: </p>
+    <h2>Các bài viết liên quan:</h2>
 
 </div>
 <!-- Comments -->
 <div class="comments">
-    <p>Bình luận:</p>
-    
-    <div class="comment-list">
-        <div class="comment">
-            <div class="comment-metadata">
-                <strong></strong>
-                <span class="comment-date"></span>
-            </div>
-            <div class="comment-content"></div>
-        </div>
+    <h2>Bình luận:</h2>
+    <ul class="comment-list">
+        <% include comment %>
+        <% include comment %>
+        <% include comment %>
+        <% include comment %>
+        <% include comment %>
+    </ul>
+    <div class="comment-box">
+        <textarea name="comment" id="comment-input" onkeydown="summitComment(event)" placeholder="Comment ở chỗ này bạn ơi ~~" required></textarea>
+        <p>Ctrl + Enter để gửi bình luận</p>
     </div>
 </div>

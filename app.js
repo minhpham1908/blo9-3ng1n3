@@ -11,11 +11,14 @@ var session = require('express-session');
 var cookieSession = require('cookie-session')
 var passport = require('passport')
 var indexRouter = require('./routes/index')
+var apiRouter = require('./routes/api')
 var authRouter = require('./routes/auth')
 var passportSetup = require('./auth/google')
 var config = require('./auth/_config')
+var logger = require('morgan')
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger('dev'))
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(favicon(path.join(__dirname, "public", "favicon", "favicon.ico")))
@@ -63,8 +66,10 @@ sqlUtil.connect2db()
 
 app.use('/', indexRouter)
 app.use('/auth', authRouter)
+app.use('/api', apiRouter)
 
 app.get("/about", (req, res) => {
+    
     res.render("notfound")
 })
 
@@ -76,6 +81,8 @@ app.get("/post", (req, res) => {
 
 app.get("/post/:postLink", async (req, res) => {
     console.log("PARAM:", req.params)
+    console.log("session:", req.session)
+    console.log("user:", req.user)
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
     var postInfo = await sqlUtil.getThePost(link)

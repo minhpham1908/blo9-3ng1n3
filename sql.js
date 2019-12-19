@@ -32,6 +32,8 @@ function getPosts() {
             if (err) reject(err)
             var results = JSON.stringify(results);
             var posts = JSON.parse(results);
+            console.log(posts)
+            console.log(fields)
             posts.forEach(post => {
                 post.dateCreated = convertDate(post.dateCreated, "DD MMM YYYY")
             });

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <p>A function is triggered when the user is pressing a key in the input field.</p>
+
+    <input type="text" onkeydown="myFunction(event)">
+
+    <script>
+        function myFunction(e) {
+            var enterKey = e.keyCode;
+            var ctrlKey = e.ctrlKey;
+            if (enterKey === 13 && ctrlKey) {
+                console.log("ok")
+            }
+            console.log(e)
+        }
+    </script>
+
+</body>
+
+</html>

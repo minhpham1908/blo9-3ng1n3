@@ -22,17 +22,19 @@ var postInfo = {
     tags: ["nothing"]
 }
 
-sqlUtil.connect2db()
+// sqlUtil.connect2db()
 async function he(tagId) {
     // var tags = await sqlUtil.getAllTags()
     // var result = await sqlUtil.createUser('113486703879106033181','Minh Pham')
     // result = await sqlUtil.createUser('113486703879106033183','Minh Pham')
-    result = await sqlUtil.getUser("113486703879106033185")
+    result = await sqlUtil.getPosts()
     console.log("POSTS:", result)
     sqlUtil.end()
     // var numberofPost =posts.length
 }
-he()
+// he()
+
+
 
 // var data = fs.readFileSync(path, "utf-8")
 
@@ -42,6 +44,7 @@ he()
 // module.exports.getPost = getPost;
 
 
-
+var d = new Date();
+console.log(d)
 
 

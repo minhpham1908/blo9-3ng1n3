@@ -114,21 +114,29 @@
 }
 
 .comments {
-    padding: 1rem;
+    padding: 1rem 0;
     border-top: 1px solid #eee;
+
 }
 
 .comment-list {
-
+    padding: 0;
+    text-align: justify;
 }
 
 
 .comment {
-
+    list-style-type: none;
+    margin: 0.5rem 0;
 }
 
 .comment-metadata span {
     color: gray;
+}
+
+#comment-input {
+    width: 100%;
+    resize: none;
 }
 
 .footer {
