@@ -18,6 +18,7 @@ var config = require('./auth/_config')
 var logger = require('morgan')
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(logger('dev'))
 app.use(express.static("public"));
 app.set("view engine", "ejs");

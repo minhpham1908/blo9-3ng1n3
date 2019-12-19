@@ -32,8 +32,6 @@ function getPosts() {
             if (err) reject(err)
             var results = JSON.stringify(results);
             var posts = JSON.parse(results);
-            console.log(posts)
-            console.log(fields)
             posts.forEach(post => {
                 post.dateCreated = convertDate(post.dateCreated, "DD MMM YYYY")
             });
@@ -76,9 +74,9 @@ async function getThePost(link) {
     try {
         var postInfo = await getPostInfo(link);
         postInfo = await getPostTagInfo(postInfo.postId)
-        return Promise.resolve(postInfo)
+        return postInfo
     } catch (error) {
-        return Promise.reject(postInfo)
+        return postInfo
     }
     //get post taginfo
 }
