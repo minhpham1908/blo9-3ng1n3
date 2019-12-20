@@ -6,7 +6,6 @@ async function summitComment(e) {
         console.log("Bắt đầu gửi comment lên server")
         try {
             var data = await postComment()
-            console.log(data.status)
         } catch (error) {
             console.log(error)
         }
@@ -28,6 +27,11 @@ async function postComment() {
         },
         body: JSON.stringify(body)
     })
+    if(response.status === 200 ) {
+        addComment()
+    }
     return response;
 
 }
+
+function addComment()

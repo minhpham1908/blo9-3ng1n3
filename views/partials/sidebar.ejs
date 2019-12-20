@@ -1,7 +1,7 @@
 <nav class="sidebar">
     <div class="container">
         <% if(user) {%>
-        <p><a href="/profile"><%=user.username%></a>, <a href="/auth/logout">Log out</a></p>
+        <p><%=user.username%>, <a href="/auth/logout">Log out</a></p>
         <%} else { %>
         <a href="/auth/google">Login</a>
         <% } %>

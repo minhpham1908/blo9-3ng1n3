@@ -25,11 +25,9 @@
 <div class="comments">
     <h2>Bình luận:</h2>
     <ul class="comment-list">
-        <% include comment %>
-        <% include comment %>
-        <% include comment %>
-        <% include comment %>
-        <% include comment %>
+        <% post.comments.forEach((comment)=> {%>
+           <%-include('comment', {comment: comment})%>
+        <%}) %>
     </ul>
     <div class="comment-box">
         <textarea name="comment" id="comment-input" onkeydown="summitComment(event)" placeholder="Comment ở chỗ này bạn ơi ~~" required></textarea>

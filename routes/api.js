@@ -2,18 +2,18 @@ var express = require('express')
 var sqlUtil = require('../sql')
 var router = express.Router()
 
-router.post('/post/:postLink',async (req, res, next) => {
-    //check postLink is right?
+//Comment
+router.post('/post/:postLink', async (req, res, next) => {
     var postLink = req.params.postLink
-    console.log(req.body)
-    // var date = new Date(req.body.date)
-    // console.log(date)
+    var content = req.body.content
+    var date = new Date(req.body.date)
     var post = await sqlUtil.getThePost(postLink)
-    //check session
-    console.log(post)
-    //store comment
-    // var code = await sqlUtil.storeComment(post.postID, userID, date, content)
-    //send back response
+    var postId = post.postId
+    var userId = '0'
+    if (req.session.passport.user) {
+        userId = req.session.passport.user
+    }
+    var code = await sqlUtil.storeComment(postId, userId, date, content)
     res.status(200).send()
 })
 
