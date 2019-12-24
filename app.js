@@ -87,6 +87,8 @@ app.get("/post/:postLink", async (req, res) => {
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
     var postInfo = await sqlUtil.getThePost(link)
+    var comments = await sqlUtil.getComments(postInfo.comments)
+    postInfo.comments = comments
     var data = fs.readFileSync(path, "utf-8")
     data = data.toString();
     data = marked(data, (err, result) => {
@@ -108,7 +110,7 @@ app.get("/tags/:tag", async function (req, res) {
     console.log(tag)
     console.log(posts)
     console.log(tags)
-    res.render("tags", { tag: tag, posts: posts, tags: tags });
+    res.render("tags", { tag: tag, posts: posts, tags: tags, user: req.user });
 })
 
 app.get("*", function (req, res) {

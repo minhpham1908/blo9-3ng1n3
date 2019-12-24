@@ -1,5 +1,5 @@
 <%- include("partials/header", {css: "ulgrid"}) %>
-<% include partials/sidebar %>
+<%- include('partials/sidebar', {user: user}) %>
 
 <div class="container content">
     <h2>Posts with tag <span class="tags"><span class="tag"><%=tag%></span></span></h2>
