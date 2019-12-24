@@ -1,15 +1,12 @@
+var commentList = document.querySelector("ul.comment-list");
 
 async function summitComment(e) {
     var enterKey = e.keyCode;
     var ctrlKey = e.ctrlKey;
     if (enterKey === 13 && ctrlKey) {
         console.log("Bắt đầu gửi comment lên server")
-        try {
-            var data = await postComment()
-        } catch (error) {
-            console.log(error)
-        }
-
+        var data = await postComment()
+        addComment(createNewComment(data))
     }
 }
 
@@ -27,11 +24,33 @@ async function postComment() {
         },
         body: JSON.stringify(body)
     })
-    if(response.status === 200 ) {
-        addComment()
+    if (response.status === 200) {
+        return response.json();
     }
-    return response;
-
 }
 
-function addComment()
+function addComment(comment) {
+    var commentList = document.querySelector("ul.comment-list");
+    commentList.appendChild(comment)
+}
+
+function createNewComment(data) {
+    var username = data.username
+    var date = data.date
+    var content = data.content
+    var comment = document.createElement("li")
+    comment.classList.add("comment")
+    var commentMetaData = document.createElement("div")
+    commentMetaData.classList.add("comment-metadata")
+    commentMetaData.appendChild(document.createElement("strong")).append(username)
+    commentMetaData.append(" lúc ")
+    commentMetaData.appendChild(document.createElement("span")).append(date)
+    commentMetaData.lastElementChild.classList.add("comment-date")
+    var commentContent = document.createElement("div")
+    commentContent.classList.add("comment-content")
+    commentContent.appendChild(document.createElement("p")).append(content)
+    comment.appendChild(commentMetaData)
+    comment.appendChild(commentContent)
+    console.log(comment)
+    return comment
+}

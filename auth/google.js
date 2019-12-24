@@ -8,8 +8,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (idUser, done) => {
-    var users = await sqlUtil.getUser(idUser)
-    user = users[0]
+    var user = await sqlUtil.getUser(idUser)
     done(null, user)
 })
 
@@ -21,6 +20,7 @@ passport.use(new GoogleStrategy({
     console.log('passport callback function')
     var id = profile.id
     var username = profile.displayName
+    console.log(profile)
     var result = await sqlUtil.findUserById(id)
     if (result === 0) {
         //create new User
@@ -32,8 +32,8 @@ passport.use(new GoogleStrategy({
         done(null, user)
     } else {
         //lay tt user ra
-        var users = await sqlUtil.getUser(id) // ham tra ve 1 mang 
-        var user = users[0]
+        var user = await sqlUtil.getUser(id)
+        console.log(user)
         done(null, user)
     }
 }

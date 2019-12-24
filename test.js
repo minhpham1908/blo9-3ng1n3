@@ -27,7 +27,7 @@ async function he(tagId) {
     // var tags = await sqlUtil.getAllTags()
     // var result = await sqlUtil.createUser('113486703879106033181','Minh Pham')
     // result = await sqlUtil.createUser('113486703879106033183','Minh Pham')
-    result = await sqlUtil.getComments(3)
+    result = await sqlUtil.findUserById(0)
     console.log("REsult:", result)
     sqlUtil.end()
     // var numberofPost =posts.length

@@ -154,8 +154,8 @@ function getUser(id) {
         con.query(sqlQuery, (err, results, fields) => {
             if (err) reject(err)
             results = JSON.stringify(results);
-            results = JSON.parse(results);
-            resolve(results)
+            result = JSON.parse(results)[0];
+            resolve(result)
 
         })
     })
@@ -172,7 +172,7 @@ function storeComment(postId, userId, date, content) {
 }
 
 function getComments(postId) {
-    var sqlQuery = 'select idComment, Comment.userId, username, date, content from Comment, User, post where post.postId = Comment.postId and User.idUser = Comment.userId and Comment.postId = ?'
+    var sqlQuery = 'select idComment, Comment.userId, username, date, content from Comment, User, post where post.postId = Comment.postId and User.idUser = Comment.userId and Comment.postId = ? order by date asc'
     return new Promise((resolve, reject) => {
         con.query(sqlQuery, [postId], (err, results, fields) => {
             if (err) reject(err)

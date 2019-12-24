@@ -87,7 +87,7 @@ app.get("/post/:postLink", async (req, res) => {
     var link = req.params.postLink;
     var path = __dirname + "/posts/" + link + ".md"
     var postInfo = await sqlUtil.getThePost(link)
-    var comments = await sqlUtil.getComments(postInfo.comments)
+    var comments = await sqlUtil.getComments(postInfo.postId)
     postInfo.comments = comments
     var data = fs.readFileSync(path, "utf-8")
     data = data.toString();
@@ -113,9 +113,9 @@ app.get("/tags/:tag", async function (req, res) {
     res.render("tags", { tag: tag, posts: posts, tags: tags, user: req.user });
 })
 
-app.get("*", function (req, res) {
-    res.redirect("/")
-})
+// app.get("*", function (req, res) {
+//     res.redirect("/")
+// })
 
 app.listen(3200, "localhost", function () {
     console.log("Listening on port 3200");
