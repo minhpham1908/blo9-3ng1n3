@@ -7,6 +7,7 @@ async function summitComment(e) {
         console.log("Bắt đầu gửi comment lên server")
         var data = await postComment()
         addComment(createNewComment(data))
+        clearCommentInput()
     }
 }
 
@@ -53,4 +54,7 @@ function createNewComment(data) {
     comment.appendChild(commentContent)
     console.log(comment)
     return comment
+}
+function clearCommentInput() {
+    document.querySelector("textarea").value = ""   
 }
