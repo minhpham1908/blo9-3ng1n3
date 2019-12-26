@@ -6,6 +6,7 @@ var sqlUtil = require("./sql")
 var marked = require("marked")
 var favicon = require('serve-favicon')
 var path = require("path")
+var postUtil = require('./postUtil')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -52,10 +53,18 @@ app.get("/post/:post", async function(req, res) {
 
 app.post("/newpost", async function(req, res) {
     var body = req.body
-    await postToMetadata();
-    await postToFileContent();
-    res.send("ok")
+    console.log(body)
+    await postUtil.postToMetadata(body)
+    await postUtil.postToFileContent(body)
+    res.status(200).send();
+    
 })
+
+app.get("/api/tags", (req, res) => {
+    query = req.query
+    console.log("query:", query)
+})
+
 
 app.listen(3201, (err)=>{
     if(err) throw err

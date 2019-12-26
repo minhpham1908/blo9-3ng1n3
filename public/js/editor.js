@@ -1,7 +1,5 @@
-
 var simplemde = new SimpleMDE({
     autofocus: true,
-
     element: document.getElementById("content"),
 
     insertTexts: {
@@ -44,32 +42,109 @@ var simplemde = new SimpleMDE({
 
 });
 
+const config = {
+    placeholderValue: 'Nhập vào tag cho bài viết',
+    shouldSort: false,
+    searchEnabled: true,
+    searchFloor: 2,
+    searchChoices: true,
+    duplicateItems: false,
+    delimiter: ',',
+    addItems: true,
+    removeItemButton: true,
+}
+const tagInput = document.getElementById('tags-input')
+const choices = new Choices(tagInput, config);
+
+var apiUrl = new URL("http://localhost:3201/api/tags");
+var lookupDelay = 100;
+var lookupTimeout = null;
+var lookupCache = {};
+
+var serverLookup = function () {
+    var query = choices.input.value;
+    if (query in lookupCache) {
+        populateOptions(lookupCache[query]);
+    } else {
+        console.log("asdaasd")
+        var params = { query: query }
+        apiUrl.search = new URLSearchParams(params).toString()
+
+        var response = fetch(apiUrl)
+        // ajax.post(apiUrl, { query: query }, function (event) {
+        //     var results = event.target.getResponseJson();
+        //     lookupCache[query] = results;
+        //     populateOptions(results);
+        // })
+    }
+};
+
+// Function to actually populate the results from the API lookup.
+var populateOptions = function (options) {
+    // We have to cull duplicates ourselves here, because Choices doesn't do it for
+    // us. There's probably a better way of doing this, but here's the easy way:
+    var toRemove = [];
+    for (var i = 0; i < choices.currentState.items.length; i++) {
+        var item = choices.currentState.items[i];
+        if (item.active) {
+            toRemove.push(item.value);
+        }
+    }
+    var toKeep = [];
+    for (var i = 0; i < options.length; i++) {
+        // However you check if an array contains something in your codebase.
+        if (!array_contains(toRemove, result.id)) {
+            toKeep.push(result);
+        }
+    }
+    // Now actually set the (de-duped) results.
+    choices.setChoices(toKeep, 'id', 'text', true);
+};
+
+// Trigger an API lookup when the user pauses after typing.
+tagInput.addEventListener('search', function (event) {
+    console.log("search")
+    clearTimeout(lookupTimeout);
+    lookupTimeout = setTimeout(serverLookup, lookupDelay);
+});
+
+// We want to clear the API-provided options when a choice is selected.
+tagInput.addEventListener('choice', function (event) {
+    console.log("choice")
+    choices.setChoices([], 'id', 'text', true);
+});
+
 var post = {
     title: '',
     content: '',
-    date:'',
+    date: '',
     tags: [],
 
 }
 var getContentBtn = document.querySelector("#get-content")
 getContentBtn.addEventListener("click", postPost)
 
-function postPost() {
+async function postPost() {
     post.title = document.querySelector("#title-input").value
     post.date = new Date();
     post.content = getContent()
+    post.tags = choices.getValue(true)
     console.log(post)
+    var url = new URL("http://localhost:3201/newpost")
+    var response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    }
+    )
+    if (response.status === 200) {
+        location.replace("http://localhost:3201")
+    }
 }
 
 function getContent() {
     var content = simplemde.value()
     return content
 }
-
-const choices = new Choices(document.getElementById('tags-input'), {
-    delimiter: ',',
-    editItems: true,
-    maxItemCount: 5,
-    removeItemButton: true,
-});
-

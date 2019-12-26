@@ -125,6 +125,45 @@ function getPostsByTag(tag) {
     })
 }
 
+function createPost(post) {
+    var sqlQuery = "insert into post(title,path,dateCreated,summary) value (?,?,?,?)"
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, [post.title, post.path, post.date, post.summary], (err, results, fields) => {
+            if (err) reject(err)
+            resolve(200)
+        })
+    })
+}
+function getTagId(tag) {
+    var sqlQuery = "select * from tag where tag = ?"
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, tag, (err, results, fields) => {
+            if (err) reject(err)
+            results = JSON.stringify(results);
+            results = JSON.parse(results);
+            resolve(results)
+        })
+    })
+}
+function createTag(tag) {
+    var sqlQuery = "insert into tag(tag) value(?)"
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, tag, (err, results, fields) => {
+            if (err) reject(err)
+            resolve('ok')
+        })
+    })
+}
+function createPostTag(tagId, postId) {
+    var sqlQuery = "insert into posttag(tagId,postId) value(?,?)"
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, [tagId, postId], (err, results, fields) => {
+            if (err) reject(err)
+            resolve('ok')
+        })
+    })
+}
+
 function createUser(userId, username) {
     var sqlQuery = `insert into User(idUser, username) value ('${userId}', '${username}')`
     return new Promise((resolve, reject) => {
@@ -206,5 +245,9 @@ module.exports = {
     getUser,
     storeComment,
     getComments,
+    createPost,
+    getTagId,
+    createTag,
+    createPostTag,
     end
 }
