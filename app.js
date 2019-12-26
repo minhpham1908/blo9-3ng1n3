@@ -10,9 +10,7 @@ var sqlUtil = require("./sql")
 var session = require('express-session');
 var cookieSession = require('cookie-session')
 var passport = require('passport')
-var indexRouter = require('./routes/index')
-var apiRouter = require('./routes/api')
-var authRouter = require('./routes/auth')
+var route = require("./routes/route")
 var passportSetup = require('./auth/google')
 var config = require('./auth/_config')
 var logger = require('morgan')
@@ -65,9 +63,9 @@ sqlUtil.connect2db()
 
 
 
-app.use('/', indexRouter)
-app.use('/auth', authRouter)
-app.use('/api', apiRouter)
+app.use('/', route.indexRouter)
+app.use('/auth',route.authRouter)
+app.use('/api', route.apiRouter)
 
 app.get("/about", (req, res) => {
     
@@ -89,6 +87,7 @@ app.get("/post/:postLink", async (req, res) => {
     var postInfo = await sqlUtil.getThePost(link)
     var comments = await sqlUtil.getComments(postInfo.postId)
     postInfo.comments = comments
+    console.log(postInfo)
     var data = fs.readFileSync(path, "utf-8")
     data = data.toString();
     data = marked(data, (err, result) => {

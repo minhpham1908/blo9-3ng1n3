@@ -44,12 +44,26 @@ var simplemde = new SimpleMDE({
 
 });
 
-var content
+var post = {
+    title: '',
+    content: '',
+    date:'',
+    tags: [],
+
+}
 var getContentBtn = document.querySelector("#get-content")
-getContentBtn.addEventListener("click", getContent)
+getContentBtn.addEventListener("click", postPost)
+
+function postPost() {
+    post.title = document.querySelector("#title-input").value
+    post.date = new Date();
+    post.content = getContent()
+    console.log(post)
+}
 
 function getContent() {
-    content = simplemde.value()
+    var content = simplemde.value()
+    return content
 }
 
 const choices = new Choices(document.getElementById('tags-input'), {
