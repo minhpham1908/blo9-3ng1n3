@@ -67,11 +67,6 @@ app.use('/', route.indexRouter)
 app.use('/auth',route.authRouter)
 app.use('/api', route.apiRouter)
 
-app.get("/about", (req, res) => {
-    
-    res.render("notfound")
-})
-
 
 
 app.get("/post", (req, res) => {

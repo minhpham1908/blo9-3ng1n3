@@ -114,3 +114,7 @@ tagInput.addEventListener('choice', function (event) {
     choices.setChoices([], 'id', 'text', true);
 });
 
+function getContent() {
+    var content = simplemde.value()
+    return content
+}

@@ -1,5 +1,5 @@
 var express = require("express")
-var fs  = require("fs")
+var fs = require("fs")
 var bodyParser = require("body-parser")
 var app = express()
 var sqlUtil = require("./sql")
@@ -29,16 +29,16 @@ marked.setOptions({
     headerIds: false
 })
 
-app.get("/", async function(req, res) {
+app.get("/", async function (req, res) {
     var posts = await sqlUtil.getPosts();
-    res.render("admin-home",{ posts: posts })
+    res.render("admin-home", { posts: posts })
 })
 
-app.get("/newpost", function(req, res ){
+app.get("/newpost", function (req, res) {
     res.render("newpost")
 })
 
-app.get("/post/:post", async function(req, res) {
+app.get("/post/:post", async function (req, res) {
     var postLink = req.params.post
     var path = __dirname + "/posts/" + postLink + ".md"
     var postInfo = await sqlUtil.getThePost(postLink)
@@ -48,13 +48,12 @@ app.get("/post/:post", async function(req, res) {
     res.render("editPost", { postInfo: postInfo })
 })
 
-app.post("/newpost", async function(req, res) {
+app.post("/newpost", async function (req, res) {
     var body = req.body
-    console.log(body)
     await postUtil.postToMetadata(body)
     await postUtil.postToFileContent(body)
     res.status(200).send();
-    
+
 })
 
 app.get("/api/tags", (req, res) => {
@@ -65,14 +64,21 @@ app.get("/api/tags", (req, res) => {
 app.delete('/api/post/:postLink', async (req, res, next) => {
     var postLink = req.params.postLink
     var path = postUtil.format(postLink)
-    console.log(path)
     await sqlUtil.deletePost(path)
     postUtil.deletePostContent(path)
     res.status(200).send()
 })
 
+app.put('/api/post/:postLink', (req, res, next) => {
+    var content = req.body.content
+    var path = postUtil.format(req.params.postLink)
+    console.log(content)
+    postUtil.updatePost(path, content)
+    res.status(200).send()
+})
 
-app.listen(3201, (err)=>{
-    if(err) throw err
+
+app.listen(3201, (err) => {
+    if (err) throw err
     console.log("listen on 3201")
 })

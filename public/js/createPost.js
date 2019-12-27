@@ -28,7 +28,3 @@ async function postPost() {
     }
 }
 
-function getContent() {
-    var content = simplemde.value()
-    return content
-}

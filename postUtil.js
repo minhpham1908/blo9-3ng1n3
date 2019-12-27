@@ -30,8 +30,6 @@ async function postToMetadata(body) {
 function postToFileContent(body) {
     var path = __dirname + "/posts/" + format(body.title) + ".md"
     content = body.content
-    console.log(path)
-    console.log(content)
     fs.writeFileSync(path, content)
 
 }
@@ -39,6 +37,11 @@ function postToFileContent(body) {
 function deletePostContent(path) {
     var path = __dirname + "/posts/" + path + ".md"
     fs.unlinkSync(path)
+}
+
+function updatePost(path, content) {
+    var path = __dirname + "/posts/" + path + ".md"
+    fs.writeFileSync(path, content)
 }
 
 function format(str) {
@@ -65,5 +68,6 @@ module.exports = {
     postToMetadata,
     postToFileContent,
     deletePostContent,
+    updatePost,
     format
 }
