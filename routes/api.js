@@ -22,8 +22,9 @@ router.post('/post/:postLink', async (req, res, next) => {
     var code = await sqlUtil.storeComment(postId, userId, date, content)
     var user = await sqlUtil.getUser(userId)
 
-    res.status(200).send({ username: user.username, date: dateFormat(date,"hh:mm:ss A DD/MM/YYYY"), content: content })
+    res.status(200).send({ username: user.username, date: dateFormat(date, "hh:mm:ss A DD/MM/YYYY"), content: content })
 })
+
 
 
 

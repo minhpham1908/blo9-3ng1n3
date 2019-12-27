@@ -1,5 +1,28 @@
 <%- include("partials/admin-header", {webTitle: "post"}) %>
-
+<div class="container content">
+    <div class="post">
+        <div class="post-title">
+            <input id="title-input" type="text" placeholder="Nhập vào tựa đề bài viết của bạn"
+                value="<%= postInfo.title%>">
+        </div>
+        <div class="post-content">
+            <textarea id="content"><%= postInfo.content%></textarea>
+        </div>
+        <div class="tags">
+            <input class="form-control" id="tags-input" type="text" placeholder="Tags..." value="<%postInfo.tags.forEach((tag,index )=> { %>
+                
+                <%if(index === postInfo.tags.length-1) {%>
+                    <%=tag%>
+                    <%} else {%>
+                    <%=tag%>,
+               <% }%>
+           <% });%>" />
+        </div>
+        <Button id="update-content">Update</Button>
+        <Button id="delete-content">Delete post</Button>
+    </div>
+</div>
 
 <script src="/js/editor.js"></script>
+<script src="/js/alterPost.js"></script>
 <% include partials/footer %>

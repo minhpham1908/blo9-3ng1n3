@@ -7,6 +7,7 @@ var marked = require("marked")
 var favicon = require('serve-favicon')
 var path = require("path")
 var postUtil = require('./postUtil')
+var route = require('./routes/route')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -41,14 +42,10 @@ app.get("/post/:post", async function(req, res) {
     var postLink = req.params.post
     var path = __dirname + "/posts/" + postLink + ".md"
     var postInfo = await sqlUtil.getThePost(postLink)
-    console.log(postInfo)
     var data = fs.readFileSync(path, "utf-8")
     data = data.toString();
-    data = marked(data, (err, result) => {
-        if (err) throw err
-        postInfo.content = result;
-        res.render("editPost", { postInfo: postInfo })
-    })
+    postInfo.content = data;
+    res.render("editPost", { postInfo: postInfo })
 })
 
 app.post("/newpost", async function(req, res) {
@@ -63,6 +60,15 @@ app.post("/newpost", async function(req, res) {
 app.get("/api/tags", (req, res) => {
     query = req.query
     console.log("query:", query)
+})
+
+app.delete('/api/post/:postLink', async (req, res, next) => {
+    var postLink = req.params.postLink
+    var path = postUtil.format(postLink)
+    console.log(path)
+    await sqlUtil.deletePost(path)
+    postUtil.deletePostContent(path)
+    res.status(200).send()
 })
 
 

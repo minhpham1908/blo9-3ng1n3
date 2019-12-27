@@ -97,9 +97,7 @@ app.get("/post/:postLink", async (req, res) => {
     })
 })
 
-app.get("/tags/", function (req, res) {
-    res.render("notfound")
-})
+
 
 app.get("/tags/:tag", async function (req, res) {
     console.log("Param:", req.params)
@@ -112,9 +110,9 @@ app.get("/tags/:tag", async function (req, res) {
     res.render("tags", { tag: tag, posts: posts, tags: tags, user: req.user });
 })
 
-// app.get("*", function (req, res) {
-//     res.redirect("/")
-// })
+app.get("*", function (req, res) {
+    res.redirect("/")
+})
 
 app.listen(3200, "localhost", function () {
     console.log("Listening on port 3200");

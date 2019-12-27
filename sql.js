@@ -229,6 +229,19 @@ function getComments(postId) {
     })
 }
 
+function deletePost(path) {
+    console.log("delete")
+    var sqlQuery = "DELETE FROM post WHERE path = ? ";
+    return new Promise((resolve, reject) => {
+        con.query(sqlQuery, path, (err, results, fields) => {
+            if (err) reject(err)
+            console.log(results)
+            resolve(200)
+        })
+    })
+}
+
+
 function end() {
     con.end()
 }
@@ -248,6 +261,6 @@ module.exports = {
     createPost,
     getTagId,
     createTag,
-    createPostTag,
+    createPostTag, deletePost,
     end
 }
