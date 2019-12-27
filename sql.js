@@ -1,13 +1,8 @@
 const mysql = require("mysql")
 var convertDate = require("./getdatemodule")
-var moment = require("moment")
-var info = {
-    host: "128.199.239.13",
-    port: 3306,
-    user: "root",
-    password: "gn1C4IrvFiGesuwK",
-    database: "blogdb"
-}
+
+var info = require('./auth/_config').database
+
 var con = mysql.createConnection(info)
 //create a post
 //create a new reocord in PostTag Table by postId
